@@ -5,14 +5,14 @@ import java.util.Set;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
-public class ThreadPoolExecutor {
+public class MyThreadPoolExecutor {
     private BlockingQueue<Runnable> tasks = new LinkedBlockingQueue<>();
     private Set<Worker> workers = new HashSet<>();
 
     // limit size of workers set
     private int poolSize;
 
-    public ThreadPoolExecutor(int nThreads) {
+    public MyThreadPoolExecutor(int nThreads) {
         poolSize = nThreads;
     }
 

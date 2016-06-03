@@ -1,9 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package com.minhtu.common.pool;
 
 import java.util.logging.Level;
@@ -20,10 +14,10 @@ public class ThreadPool extends GenericObjectPool<Thread> {
 	private static final int POOL_SIZE = 10;
     private static PoolableObjectFactory factory = new ThreadFactory();
     
-	public static final ThreadPool INSTANCE = new ThreadPool();
+	public static final ThreadPool INSTANCE = new ThreadPool(POOL_SIZE);
 	
-	private ThreadPool() {
-		super(factory, POOL_SIZE);
+	private ThreadPool(int poolSize) {
+		super(factory, poolSize);
 	}
 	
     @Override
