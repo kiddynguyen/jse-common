@@ -65,6 +65,7 @@
     <!-- http://crunchify.com/how-to-create-build-java-project-including-all-dependencies-using-maven-maven-resources-maven-dependency-maven-jar-plugin-tutorial/ -->
     <build>
         <plugins>
+            <!-- Copy resources to 'resources' folder -->
             <plugin>
                 <artifactId>maven-resources-plugin</artifactId>
                 <version>2.6</version>
@@ -87,6 +88,7 @@
                     </execution>
                 </executions>
             </plugin>
+            <!-- Copy dependencies to 'lib' folder --> 
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-dependency-plugin</artifactId>
@@ -106,6 +108,7 @@
                     </execution>
                 </executions>
             </plugin>
+            <!-- Sign the JAR: update class-path for Manifest file -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
@@ -120,7 +123,6 @@
                             <Class-Path>.</Class-Path>
                         </manifestEntries>
                     </archive>
-
                     <finalName>jse-common/jse-common</finalName>
                 </configuration>
             </plugin>
