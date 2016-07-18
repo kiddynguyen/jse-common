@@ -9,13 +9,13 @@ import java.util.Random;
 /**
  * @author tunm2
  */
-public class MergeSort {
+public class MergeSortLinkedList {
     
     public static void main(String[] args) throws IOException {
         Random rand = new Random();
         List<Integer> list = new ArrayList<>();
-        for (int i = 0; i < 50; i++) {
-            int num = rand.nextInt(100);
+        for (int i = 0; i < 5000000; i++) {
+            int num = rand.nextInt(1000000);
             list.add(num);
         }
         
