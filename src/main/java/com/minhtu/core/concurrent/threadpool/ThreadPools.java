@@ -1,4 +1,4 @@
-package com.minhtu.core.concurrent;
+package com.minhtu.core.concurrent.threadpool;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;

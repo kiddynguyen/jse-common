@@ -1,4 +1,4 @@
-package com.minhtu.core.concurrent;
+package com.minhtu.core.concurrent.threadpool;
 
 import java.util.HashSet;
 import java.util.Set;
