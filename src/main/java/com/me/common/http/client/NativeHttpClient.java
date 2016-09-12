@@ -5,9 +5,11 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.SocketTimeoutException;
 import java.net.URL;
+import java.net.URLEncoder;
 import java.util.Map;
 import org.apache.log4j.Logger;
 
@@ -82,7 +84,7 @@ public class NativeHttpClient {
             query = qbuilder.toString();
         }
         
-        return NativeHttpClient.this.get(domain, uri, query);
+        return get(domain, uri, query);
     }
 
     public HttpResponse post(String domain, String uri, String query) {
@@ -102,7 +104,11 @@ public class NativeHttpClient {
             conn.setRequestMethod("POST");
             conn.setConnectTimeout(CONN_TIMEOUT);
             conn.setReadTimeout(READ_TIMEOUT);
-            conn.setRequestProperty("Content-Length", query == null ? "0" : String.valueOf(query.length())); // header
+            
+            // header
+            conn.setRequestProperty("Content-Length", query == null ? "0" : String.valueOf(query.length()));
+//            conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded"); // default
+            
             conn.setDoOutput(true);
             conn.setUseCaches(false);
             conn.setAllowUserInteraction(false);
@@ -138,24 +144,18 @@ public class NativeHttpClient {
         return resp;
     }
     
-    public HttpResponse post(String domain, String uri, Map<String, Object> params) {
+    public HttpResponse post(String domain, String uri, Map<String, Object> params) throws UnsupportedEncodingException {
         String query = "";
         if (params != null && !params.isEmpty()) {
             StringBuilder qbuilder = new StringBuilder();
             for (Map.Entry<String, Object> param : params.entrySet()) {
-                qbuilder.append(param.getKey()).append("=").append(param.getValue()).append("&");
+                String pname = param.getKey();
+                String pval = URLEncoder.encode(String.valueOf(param.getValue()), "UTF-8");
+                qbuilder.append(pname).append("=").append(pval).append("&");
             }
             query = qbuilder.toString().substring(0, qbuilder.length()-1);
         }
         
-        return NativeHttpClient.this.post(domain, uri, query);
-    }
-    
-    public static void main(String[] args) {
-        NativeHttpClient client = new NativeHttpClient();
-        HttpResponse resp = client.get("http://dictionary.cambridge.org", null, "");
-        System.out.println(resp);
-        
-        System.exit(0);
+        return post(domain, uri, query);
     }
 }

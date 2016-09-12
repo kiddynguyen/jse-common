@@ -3,6 +3,7 @@ package com.me.common.http.client;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -45,7 +46,6 @@ public class ApacheHttpClient {
         URI uri = uriBuilder.build();
         logger.info("URL: " + uri);
         HttpGet request = new HttpGet(uri);
-        request.setHeader("Content-Type", "text/html; charset=UTF-8");
         HttpResponse response = client.execute(request);
         return response;
     }
@@ -79,8 +79,8 @@ public class ApacheHttpClient {
             paramPairs.add(new BasicNameValuePair(param.getKey(), String.valueOf(param.getValue())));
         
         HttpPost request = new HttpPost(url);
-        request.setHeader("Content-Type", "text/html; charset=utf-8");
-        request.setEntity(new UrlEncodedFormEntity(paramPairs));
+//        request.setHeader("Content-Type", "application/x-www-form-urlencoded; charset=utf-8");
+        request.setEntity(new UrlEncodedFormEntity(paramPairs, StandardCharsets.UTF_8));
         
         HttpResponse response = client.execute(request);
         return response;

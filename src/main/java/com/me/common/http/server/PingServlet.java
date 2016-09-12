@@ -28,6 +28,19 @@ public class PingServlet extends HttpServlet {
         
         out(req, resp, response.toString());
     }
+
+    @Override
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        logger.info("Content-Type: " + req.getHeader("Content-Type"));
+        String msg = req.getParameter("msg");
+        logger.info("MESSAGE: " + msg);
+        
+        JSONObject response = new JSONObject();
+        response.put("client_msg", msg);
+        response.put("server_msg", "Test thôi mà");
+        
+        out(req, resp, response.toString());
+    }
     
     protected void out(HttpServletRequest req, HttpServletResponse resp, Object content) throws IOException {
 //		resp.setCharacterEncoding("UTF-8");
