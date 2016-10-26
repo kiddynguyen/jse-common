@@ -1,0 +1,47 @@
+2016-09-12 10:05:53,953 [main] INFO  com.me.common.http.server.HttpJettyServer:25 - Server is running...
+2016-09-12 10:06:00,858 [main] ERROR com.me.common.http.client.NativeHttpClient:127 - localhostping
+2016-09-12 10:06:42,922 [main] INFO  com.me.common.http.server.HttpJettyServer:25 - Server is running...
+2016-09-12 10:06:49,979 [main] ERROR com.me.common.http.client.NativeHttpClient:127 - For input string: "8080ping"
+2016-09-12 10:10:37,964 [qtp1374054608-14] INFO  com.me.common.http.server.PingServlet:34 - Content-Type: application/x-www-form-urlencoded
+2016-09-12 10:10:37,973 [qtp1374054608-14] INFO  com.me.common.http.server.PingServlet:36 - MESSAGE: Test th� m�
+2016-09-12 10:15:02,641 [main] INFO  com.me.common.http.client.NativeHttpClient:33 - REQUEST URL: http://dictionary.cambridge.org
+2016-09-12 10:15:28,412 [qtp1374054608-14] INFO  com.me.common.http.server.PingServlet:34 - Content-Type: application/x-www-form-urlencoded; charset=UTF-8
+2016-09-12 10:15:28,413 [qtp1374054608-14] INFO  com.me.common.http.server.PingServlet:36 - MESSAGE: Test th� m�
+2016-09-12 10:17:36,624 [qtp1374054608-10] INFO  com.me.common.http.server.PingServlet:34 - Content-Type: application/x-www-form-urlencoded; charset=UTF-8
+2016-09-12 10:17:36,625 [qtp1374054608-10] INFO  com.me.common.http.server.PingServlet:36 - MESSAGE: null
+2016-09-12 10:17:51,720 [qtp1374054608-14] INFO  com.me.common.http.server.PingServlet:34 - Content-Type: application/x-www-form-urlencoded; charset=UTF-8
+2016-09-12 10:17:51,721 [qtp1374054608-14] INFO  com.me.common.http.server.PingServlet:36 - MESSAGE: null
+2016-09-12 10:18:26,326 [main] ERROR com.me.common.http.client.NativeHttpClient:132 - Connection refused
+2016-09-12 10:18:40,268 [main] INFO  com.me.common.http.server.HttpJettyServer:25 - Server is running...
+2016-09-12 10:18:46,235 [qtp1844140465-11] INFO  com.me.common.http.server.PingServlet:34 - Content-Type: application/x-www-form-urlencoded
+2016-09-12 10:18:46,242 [qtp1844140465-11] INFO  com.me.common.http.server.PingServlet:36 - MESSAGE: null
+2016-09-12 10:29:56,241 [main] INFO  com.me.common.http.server.HttpJettyServer:25 - Server is running...
+2016-09-12 10:30:03,433 [qtp1374054608-11] INFO  com.me.common.http.server.PingServlet:34 - Content-Type: application/x-www-form-urlencoded
+2016-09-12 10:30:03,441 [qtp1374054608-11] INFO  com.me.common.http.server.PingServlet:36 - MESSAGE: null
+2016-09-12 10:30:36,461 [qtp1374054608-15] INFO  com.me.common.http.server.PingServlet:34 - Content-Type: application/x-www-form-urlencoded; charset=UTF-8
+2016-09-12 10:30:36,462 [qtp1374054608-15] INFO  com.me.common.http.server.PingServlet:36 - MESSAGE: null
+2016-09-12 10:31:12,951 [qtp1374054608-15] INFO  com.me.common.http.server.PingServlet:34 - Content-Type: application/x-www-form-urlencoded; charset=UTF-8
+2016-09-12 10:31:12,952 [qtp1374054608-15] INFO  com.me.common.http.server.PingServlet:36 - MESSAGE: Test th� m�
+2016-09-12 10:32:47,366 [qtp1374054608-14] INFO  com.me.common.http.server.PingServlet:34 - Content-Type: application/x-www-form-urlencoded; charset=UTF-8
+2016-09-12 10:32:47,367 [qtp1374054608-14] INFO  com.me.common.http.server.PingServlet:36 - MESSAGE: Test thôi mà
+2016-09-12 10:33:20,611 [qtp1374054608-14] INFO  com.me.common.http.server.PingServlet:34 - Content-Type: application/x-www-form-urlencoded
+2016-09-12 10:33:20,612 [qtp1374054608-14] INFO  com.me.common.http.server.PingServlet:36 - MESSAGE: Test thôi mà
+2016-09-12 17:54:12,881 [main] INFO  com.me.common.http.server.HttpJettyServer:25 - Server is running...
+2016-09-12 17:54:21,811 [qtp1374054608-12] INFO  com.me.common.http.server.PingServlet:34 - Content-Type: application/x-www-form-urlencoded; charset=UTF-8
+2016-09-12 17:54:21,818 [qtp1374054608-12] INFO  com.me.common.http.server.PingServlet:36 - MESSAGE: Test th� m�
+2016-09-12 17:55:46,220 [main] INFO  com.me.common.http.server.HttpJettyServer:25 - Server is running...
+2016-09-12 17:55:52,753 [qtp1844140465-11] INFO  com.me.common.http.server.PingServlet:34 - Content-Type: application/x-www-form-urlencoded
+2016-09-12 17:55:52,761 [qtp1844140465-11] INFO  com.me.common.http.server.PingServlet:36 - MESSAGE: Test th� m�
+2016-09-12 17:56:47,016 [qtp1844140465-11] INFO  com.me.common.http.server.PingServlet:34 - Content-Type: application/x-www-form-urlencoded; charset=UTF-8
+2016-09-12 17:56:47,016 [qtp1844140465-11] INFO  com.me.common.http.server.PingServlet:36 - MESSAGE: Test thôi mà
+2016-09-12 17:59:50,635 [main] INFO  com.me.common.http.client.ApacheHttpClient:47 - URL: http://localhost:8080/ping?msg=Test+th%C3%B4i+m%C3%A0
+2016-09-12 17:59:50,680 [qtp1844140465-13] INFO  com.me.common.http.server.PingServlet:23 - MESSAGE: Test thôi mà
+2016-09-30 15:42:38,833 [main] ERROR com.me.common.http.client.NativeHttpClient:133 - Server returned HTTP response code: 500 for URL: http://127.0.0.1:9040/auth/login
+2016-09-30 15:44:06,565 [main] ERROR com.me.common.http.client.NativeHttpClient:130 - Read timed out
+2016-09-30 15:44:58,756 [main] ERROR com.me.common.http.client.NativeHttpClient:130 - Read timed out
+2016-09-30 16:16:47,511 [main] INFO  com.me.common.http.client.NativeHttpClient:35 - REQUEST URL: http://127.0.0.1:9040/resources?username=84983418851&password=password
+2016-09-30 16:17:36,251 [main] INFO  com.me.common.http.client.NativeHttpClient:35 - REQUEST URL: http://127.0.0.1:9040/resources?username=84983418851&password=password
+2016-09-30 16:17:41,269 [main] ERROR com.me.common.http.client.NativeHttpClient:69 - Read timed out
+2016-09-30 17:31:58,730 [main] INFO  com.me.common.http.client.NativeHttpClient:35 - REQUEST URL: http://127.0.0.1:9040/resources?username=84983418851&password=password
+2016-09-30 17:31:58,819 [main] ERROR com.me.common.http.client.NativeHttpClient:72 - Connection refused
+2016-09-30 17:37:49,005 [main] INFO  com.me.common.http.client.NativeHttpClient:35 - REQUEST URL: http://127.0.0.1:9040/resources?username=84983418851&password=password

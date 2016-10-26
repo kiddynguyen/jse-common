@@ -6,21 +6,24 @@ import com.me.core.util.JSONUtil;
  * @author tunm2
  */
 public class HttpResponse {
-    public static final int SC_UNKNOWN = -1;
-    public static final int SC_CONNECTION_TIMEOUT = -2;
-    public static final int SC_SOCKET_TIMEOUT = -3;
     
-    public static final HttpResponse ERR_UNKNOWN = new HttpResponse(SC_UNKNOWN);
-    public static final HttpResponse ERR_CONNECTION_TIMEOUT = new HttpResponse(SC_SOCKET_TIMEOUT);
-    public static final HttpResponse ERR_SOCKET_TIMEOUT = new HttpResponse(SC_SOCKET_TIMEOUT);
+    public static final HttpResponse ERR_UNKNOWN = new HttpResponse(-1);
+    public static final HttpResponse ERR_CONNECTION_TIMEOUT = new HttpResponse(-2);
+    public static final HttpResponse ERR_SOCKET_TIMEOUT = new HttpResponse(-3);
     
     private int status;
-    private String content;
+    private String reason;
+    private String body;
     
     public HttpResponse() {}
     
     public HttpResponse(int status) {
         this.status = status;
+    }
+    
+    public HttpResponse(int status, String reason) {
+        this.status = status;
+        this.reason = reason;
     }
 
     public int getStatus() {
@@ -31,12 +34,20 @@ public class HttpResponse {
         this.status = status;
     }
 
-    public String getContent() {
-        return content;
+    public String getReason() {
+        return reason;
     }
 
-    public void setContent(String content) {
-        this.content = content;
+    public void setReason(String reason) {
+        this.reason = reason;
+    }
+    
+    public String getBody() {
+        return body;
+    }
+
+    public void setBody(String body) {
+        this.body = body;
     }
 
     @Override

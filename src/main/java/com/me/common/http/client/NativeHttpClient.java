@@ -9,8 +9,10 @@ import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.SocketTimeoutException;
 import java.net.URL;
+import java.net.URLConnection;
 import java.net.URLEncoder;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 import org.apache.log4j.Logger;
 
 /**
@@ -18,144 +20,161 @@ import org.apache.log4j.Logger;
  */
 public class NativeHttpClient {
     
-    private static final int CONN_TIMEOUT = 3000;   // millisecond
-    private static final int READ_TIMEOUT = 5000;   // milliseconds
+    private int connTimeout = (int) TimeUnit.SECONDS.toMillis(3);
+    private int readTimeout = (int) TimeUnit.SECONDS.toMillis(10);
+    
+    public NativeHttpClient() {}
+
+    public NativeHttpClient(int connTimeout, int readTimeout) {
+        this.connTimeout = connTimeout;
+        this.readTimeout = readTimeout;
+    }
     
     private static Logger logger = Logger.getLogger(NativeHttpClient.class);
     
-    public HttpResponse get(String domain, String uri, String query) {
-        HttpResponse resp = new HttpResponse();
+    private HttpResponse makeRequest(String method, String domain, String uri, String query, Map<String, Object> headers) {
+        method = method.toUpperCase();
+        boolean writeQueryToBody = method.equals("POST") || method.equals("PUT");
+        String reqUrl = buildRequestUrl(domain, uri, writeQueryToBody ? null : query);
+        logger.info("REQUEST URL: " + reqUrl);
         
-        StringBuilder urlBuilder = new StringBuilder();
-        urlBuilder.append(domain);
-        if (uri != null && !uri.isEmpty())
-            urlBuilder.append(uri);
-        if (query != null && !query.isEmpty())
-            urlBuilder.append("?").append(query);
-        logger.info("REQUEST URL: " + urlBuilder.toString());
-        BufferedReader reader = null;
-
         try {
-            URL url = new URL(urlBuilder.toString());
+            URL url = new URL(reqUrl);
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-            conn.setRequestMethod("GET");
-            conn.setConnectTimeout(CONN_TIMEOUT);
-            conn.setReadTimeout(READ_TIMEOUT);
-            conn.setRequestProperty("Content-Length", query == null ? "0" : String.valueOf(query.length())); // header
+            conn.setRequestMethod(method);
+            conn.setConnectTimeout(connTimeout);
+            conn.setReadTimeout(readTimeout);
+            updateRequestHeader(conn, headers);
             conn.setDoOutput(true);
             conn.setUseCaches(false);
             conn.setAllowUserInteraction(false);
             conn.connect();
             
-            // parse response
-            StringBuilder content = new StringBuilder();
-            InputStream instream = conn.getInputStream(); // stream between client and server
-            reader = new BufferedReader(new InputStreamReader(instream));
-            String line;
-            while ((line = reader.readLine()) != null)
-                content.append(line);
+            if (writeQueryToBody) {
+                conn.setRequestProperty("Content-Length", query == null ? "0" : String.valueOf(query.length()));
+                try (DataOutputStream writer = new DataOutputStream(conn.getOutputStream())) {
+                    writer.writeBytes(query);
+                    writer.flush();
+                }
+            }
             
-            resp.setStatus(conn.getResponseCode());
-            resp.setContent(content.toString());
+            HttpResponse response = new HttpResponse();
+            response.setStatus(conn.getResponseCode());
+            response.setBody(parseResponseBody(conn));
+            return response;
         } catch (SocketTimeoutException ex) {
-            logger.error(ex.getMessage());
+            logger.error(ex.getMessage(), ex);
             return HttpResponse.ERR_SOCKET_TIMEOUT;
-        } catch (IOException ex) {
-            logger.error(ex.getMessage());
+        } catch (Exception ex) {
+            logger.error(ex.getMessage(), ex);
             return HttpResponse.ERR_UNKNOWN;
-        } finally {
-            try {
-                if (reader != null)
-                    reader.close();
-            } catch (IOException i) {}
         }
-        
-        return resp;
+    }
+    
+    public HttpResponse get(String domain, String uri, String query, Map<String, Object> headers) {
+        return makeRequest("GET", domain, uri, query, headers);
+    }
+    
+    public HttpResponse get(String domain, String uri, String query) {
+        return get(domain, uri, query, null);
+    }
+    
+    public HttpResponse get(String domain, String uri, Map<String, Object> params, Map<String, Object> headers) {
+        return get(domain, uri, buildRequestQuery(params), headers);
     }
     
     public HttpResponse get(String domain, String uri, Map<String, Object> params) {
-        String query = "";
-        if (params != null && !params.isEmpty()) {
-            StringBuilder qbuilder = new StringBuilder();
-            for (Map.Entry<String, Object> param : params.entrySet()) {
-                qbuilder.append(param.getKey()).append("=").append(param.getValue()).append("&");
-            }
-            qbuilder.deleteCharAt(qbuilder.length()-1);
-            query = qbuilder.toString();
-        }
-        
-        return get(domain, uri, query);
+        return get(domain, uri, params, null);
     }
 
+    public HttpResponse post(String domain, String uri, String query, Map<String, Object> headers) {
+        return makeRequest("POST", domain, uri, query, headers);
+    }
+    
     public HttpResponse post(String domain, String uri, String query) {
-        HttpResponse resp = new HttpResponse();
-        
+        return post(domain, uri, query, null);
+    }
+    
+    public HttpResponse post(String domain, String uri, Map<String, Object> params, Map<String, Object> headers) {
+        return post(domain, uri, buildRequestQuery(params), headers);
+    }
+    
+    public HttpResponse post(String domain, String uri, Map<String, Object> params) {
+        return post(domain, uri, params, null);
+    }
+    
+    public HttpResponse put(String domain, String uri, String query, Map<String, Object> headers) {
+        return makeRequest("PUT", domain, uri, query, headers);
+    }
+    
+    public HttpResponse put(String domain, String uri, String query) {
+        return put(domain, uri, query, null);
+    }
+    
+    public HttpResponse put(String domain, String uri, Map<String, Object> params, Map<String, Object> headers) {
+        return put(domain, uri, buildRequestQuery(params), headers);
+    }
+    
+    public HttpResponse put(String domain, String uri, Map<String, Object> params) {
+        return put(domain, uri, params, null);
+    }
+    
+    public HttpResponse delete(String domain, String uri, String query) {
+        return makeRequest("DELETE", domain, uri, query, null);
+    }
+    
+    public HttpResponse delete(String domain, String uri, Map<String, Object> params) {
+        return delete(domain, uri, buildRequestQuery(params));
+    }
+    
+    private String buildRequestQuery(Map<String, Object> params) {
+        StringBuilder qbuilder = new StringBuilder();
+        if (params != null && !params.isEmpty()) {
+            try {
+                for (Map.Entry<String, Object> param : params.entrySet()) {
+                    String pval = URLEncoder.encode(String.valueOf(param.getValue()), "UTF-8");
+                    qbuilder.append(param.getKey()).append("=").append(pval).append("&");
+                }
+            } catch (UnsupportedEncodingException e) {}
+            qbuilder.deleteCharAt(qbuilder.length()-1);
+        }
+        return qbuilder.toString();
+    }
+    
+    private String buildRequestUrl(String domain, String uri, String query) {
         StringBuilder urlBuilder = new StringBuilder();
         urlBuilder.append(domain);
+        
         if (uri != null && !uri.isEmpty())
             urlBuilder.append(uri);
         
-        DataOutputStream writer = null;
-        BufferedReader reader = null;
-
-        try {
-            URL url = new URL(urlBuilder.toString());
-            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-            conn.setRequestMethod("POST");
-            conn.setConnectTimeout(CONN_TIMEOUT);
-            conn.setReadTimeout(READ_TIMEOUT);
-            
-            // header
-            conn.setRequestProperty("Content-Length", query == null ? "0" : String.valueOf(query.length()));
-//            conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded"); // default
-            
-            conn.setDoOutput(true);
-            conn.setUseCaches(false);
-            conn.setAllowUserInteraction(false);
-            conn.connect();
-            
-            writer = new DataOutputStream(conn.getOutputStream());
-            writer.writeBytes(query);
-            writer.flush();
-            
-            StringBuilder response = new StringBuilder();
-            reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-            String line;
-            while ((line = reader.readLine()) != null)
-                response.append(line);
-            
-            resp.setStatus(conn.getResponseCode());
-            resp.setContent(response.toString());
-        } catch (SocketTimeoutException ex) {
-            logger.error(ex.getMessage());
-            return HttpResponse.ERR_SOCKET_TIMEOUT;
-        } catch (IOException ex) {
-            logger.error(ex.getMessage());
-            return HttpResponse.ERR_UNKNOWN;
-        } finally {
-            try {
-                if (reader != null)
-                    reader.close();
-                if (writer != null)
-                    writer.close();
-            } catch (IOException i) {}
-        }
+        if (query != null && !query.isEmpty())
+            urlBuilder.append(urlBuilder.lastIndexOf("?") == -1 ? "?" : "&").append(query);
         
-        return resp;
+        return urlBuilder.toString();
     }
     
-    public HttpResponse post(String domain, String uri, Map<String, Object> params) throws UnsupportedEncodingException {
-        String query = "";
-        if (params != null && !params.isEmpty()) {
-            StringBuilder qbuilder = new StringBuilder();
-            for (Map.Entry<String, Object> param : params.entrySet()) {
-                String pname = param.getKey();
-                String pval = URLEncoder.encode(String.valueOf(param.getValue()), "UTF-8");
-                qbuilder.append(pname).append("=").append(pval).append("&");
-            }
-            query = qbuilder.toString().substring(0, qbuilder.length()-1);
+    private void updateRequestHeader(URLConnection conn, Map<String, Object> headers) {
+        if (headers == null || headers.isEmpty())
+            return;
+        
+        for (Map.Entry<String, Object> header : headers.entrySet())
+            conn.setRequestProperty(header.getKey(), String.valueOf(header.getValue()));
+    }
+    
+    private String parseResponseBody(URLConnection conn) throws IOException {
+        StringBuilder content = new StringBuilder();
+        InputStream instream = conn.getInputStream(); // stream between client and server
+        BufferedReader reader = new BufferedReader(new InputStreamReader(instream));
+        
+        String line;
+        try {
+            while ((line = reader.readLine()) != null)
+                content.append(line);
+        } finally {
+            reader.close();
         }
         
-        return post(domain, uri, query);
+        return content.toString();
     }
 }

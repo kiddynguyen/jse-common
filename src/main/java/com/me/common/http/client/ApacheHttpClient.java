@@ -79,7 +79,7 @@ public class ApacheHttpClient {
             paramPairs.add(new BasicNameValuePair(param.getKey(), String.valueOf(param.getValue())));
         
         HttpPost request = new HttpPost(url);
-//        request.setHeader("Content-Type", "application/x-www-form-urlencoded; charset=utf-8");
+        request.setHeader("Content-Type", "application/x-www-form-urlencoded; charset=utf-8");
         request.setEntity(new UrlEncodedFormEntity(paramPairs, StandardCharsets.UTF_8));
         
         HttpResponse response = client.execute(request);

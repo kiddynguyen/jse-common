@@ -1,9 +1,9 @@
 package com.me.core.collections.map;
 
-import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
+import java.util.TreeSet;
 
 /**
  *
@@ -12,29 +12,24 @@ import java.util.Map;
 public class Test {
     
     public static void main(String[] args) {
-//        SortedMap<ObjectKey, String> map2 = new TreeMap();
-//        for (int i = 10; i >= 0; i--) {
-//            ObjectKey key = new ObjectKey(i, "i_" + i, true);
-//            map2.put(key, "i_" + i);
-//        }
-//        
-//        Map<Integer, String> map = new LinkedHashMap<>();
-//        map.put(333, "333");
-//        map.put(222, "222");
-//        
-//        for (Integer key : map.keySet()) {
-//            String value = map.get(key);
-//            System.out.println(value);
-//        }
-//        
-//        System.out.println(map2);
+        TreeSet<Integer> tset = new TreeSet<>(new MyComparator());
+        tset.add(1);
+        tset.add(2);
+        tset.add(5);
+        tset.add(0);
         
-        Map<Integer, Long> map = new HashMap<>();
-        map.put(1, Long.MIN_VALUE);
-        map.put(2, Long.MAX_VALUE);
-        
-        List<Long> values = new ArrayList<>(map.values());
-        System.out.println(values);
+        for (Integer item : tset) {
+            System.out.println(item);
+        }
+    }
+    
+    static class MyComparator implements Comparator<Integer> {
+        @Override
+        public int compare(Integer o1, Integer o2) {
+            if (o1.equals(o2))
+                return 0;
+            return o1 < o2 ? 1 : -1;
+        }
     }
     
     static void testHashcodeAndEquals() {

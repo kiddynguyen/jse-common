@@ -1,0 +1,8 @@
+2016-09-12 10:06:00,858 [main] ERROR com.me.common.http.client.NativeHttpClient:127 - localhostping
+2016-09-12 10:06:49,979 [main] ERROR com.me.common.http.client.NativeHttpClient:127 - For input string: "8080ping"
+2016-09-12 10:18:26,326 [main] ERROR com.me.common.http.client.NativeHttpClient:132 - Connection refused
+2016-09-30 15:42:38,833 [main] ERROR com.me.common.http.client.NativeHttpClient:133 - Server returned HTTP response code: 500 for URL: http://127.0.0.1:9040/auth/login
+2016-09-30 15:44:06,565 [main] ERROR com.me.common.http.client.NativeHttpClient:130 - Read timed out
+2016-09-30 15:44:58,756 [main] ERROR com.me.common.http.client.NativeHttpClient:130 - Read timed out
+2016-09-30 16:17:41,269 [main] ERROR com.me.common.http.client.NativeHttpClient:69 - Read timed out
+2016-09-30 17:31:58,819 [main] ERROR com.me.common.http.client.NativeHttpClient:72 - Connection refused

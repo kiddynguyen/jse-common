@@ -98,7 +98,8 @@ public class NIOServer {
         }
 
         private void accept(SelectionKey key) throws IOException {
-            SocketChannel socketChannel = serverSocketChannel.accept();
+//            SocketChannel socketChannel = serverSocketChannel.accept();
+            SocketChannel socketChannel = (SocketChannel) key.channel();
             socketChannel.configureBlocking(false);
 
             int interestOps = SelectionKey.OP_READ | SelectionKey.OP_WRITE;

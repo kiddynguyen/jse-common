@@ -64,7 +64,7 @@ public class TestClient {
         Map<String, Object> params = new HashMap<>();
         params.put("msg", "Test thôi mà");
         
-        HttpResponse resp = client.post("http://localhost:8080", "/ping", params);
+        HttpResponse resp = client.post("http://localhost:8080", "/ping", params, null);
         System.out.println(resp);
     }
 }
