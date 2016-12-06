@@ -11,8 +11,11 @@ public class WaitNotifyLock {
     private boolean locked = false;
 
     public synchronized void lock() throws InterruptedException {
-        if (locked)
+        // use 'while' instead of 'if' here to guard when the thread wakes up unexpectively 
+        // without a notify call, then recheck 'locked'
+        while (locked) {
             wait();
+        }
         locked = true;
     }
 
