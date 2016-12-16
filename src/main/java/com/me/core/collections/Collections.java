@@ -10,6 +10,7 @@ import java.util.TreeMap;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.DelayQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
@@ -20,6 +21,7 @@ public class Collections {
     
     // max size = Integer.MAX_VALUE, because java array max size is Integer.MAX_VALUE
     static List<Integer> arrayList = new ArrayList<>();
+    static List<Integer> threadSafeList = new CopyOnWriteArrayList<>();
     // no limit size
     static List<Integer> linkedList = new LinkedList<>();
     

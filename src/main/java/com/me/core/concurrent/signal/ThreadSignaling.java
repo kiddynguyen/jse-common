@@ -1,7 +1,8 @@
 package com.me.core.concurrent.signal;
 
 /**
- *
+ * The mechanic behind Lock/Semaphore...
+ * 
  * @author tunm2
  */
 public class ThreadSignaling {
