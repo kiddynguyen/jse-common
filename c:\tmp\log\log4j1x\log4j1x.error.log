@@ -6,3 +6,8 @@
 2016-09-30 15:44:58,756 [main] ERROR com.me.common.http.client.NativeHttpClient:130 - Read timed out
 2016-09-30 16:17:41,269 [main] ERROR com.me.common.http.client.NativeHttpClient:69 - Read timed out
 2016-09-30 17:31:58,819 [main] ERROR com.me.common.http.client.NativeHttpClient:72 - Connection refused
+2017-01-03 17:27:23,100 [main] ERROR com.me.common.pool.ThreadPool:28 - Error borrowObject
+java.util.NoSuchElementException: Timeout waiting for idle object
+	at org.apache.commons.pool.impl.GenericObjectPool.borrowObject(GenericObjectPool.java:1174)
+	at com.me.common.pool.ThreadPool.borrowObject(ThreadPool.java:26)
+	at com.me.common.pool.ThreadPoolDemo.main(ThreadPoolDemo.java:15)

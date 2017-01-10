@@ -9,7 +9,7 @@ public class Log4j1xDemo {
     public static Logger qosCrashLogger = Logger.getLogger("qosCrashLogger");
     
     public static void main(String[] args) {
-        logger.debug("debug message...");
+//        logger.debug("debug message...");
         logger.info("info message...");
         logger.error("error message...");
         

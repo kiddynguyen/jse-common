@@ -13,4 +13,10 @@ public class ThreadFactory extends BasePoolableObjectFactory<Thread> {
 		return new Thread();
 	}
 
+    @Override
+    public boolean validateObject(Thread obj) {
+        return true;
+    }
+
+    
 }

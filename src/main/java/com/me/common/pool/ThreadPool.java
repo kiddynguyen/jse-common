@@ -1,9 +1,8 @@
 package com.me.common.pool;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.apache.commons.pool.PoolableObjectFactory;
 import org.apache.commons.pool.impl.GenericObjectPool;
+import org.apache.log4j.Logger;
 
 /**
  *
@@ -11,13 +10,14 @@ import org.apache.commons.pool.impl.GenericObjectPool;
  */
 public class ThreadPool extends GenericObjectPool<Thread> {
 	
-	private static final int POOL_SIZE = 10;
-    private static PoolableObjectFactory factory = new ThreadFactory();
+    /** max waiting time before throw exception if cannot borrow object */
+    private static final long MAX_WAIT = 1000L;
     
-	public static final ThreadPool INSTANCE = new ThreadPool(POOL_SIZE);
-	
-	private ThreadPool(int poolSize) {
-		super(factory, poolSize);
+    private static PoolableObjectFactory factory = new ThreadFactory();
+    private static Logger logger = Logger.getLogger(ThreadPool.class);
+    
+	public ThreadPool(int poolSize) {
+		super(factory, poolSize, (byte)1, MAX_WAIT);
 	}
 	
     @Override
@@ -25,10 +25,9 @@ public class ThreadPool extends GenericObjectPool<Thread> {
 		try {
 			return super.borrowObject();
 		} catch (Exception ex) {
-			Logger.getLogger(ThreadPool.class.getName()).log(Level.SEVERE, null, ex);
+			logger.error("Error borrowObject", ex);
+            return null;
 		}
-		
-		return null;
 	}
 	
     @Override
@@ -36,7 +35,7 @@ public class ThreadPool extends GenericObjectPool<Thread> {
 		try {
 			super.returnObject(object);
 		} catch (Exception ex) {
-			Logger.getLogger(ThreadPool.class.getName()).log(Level.SEVERE, null, ex);
+			logger.error("Error returnObject", ex);
 		}
 	}
 }

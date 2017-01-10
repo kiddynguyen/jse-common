@@ -5,6 +5,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.ByteBuffer;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,8 +17,9 @@ public class TextFileIO {
     
     static final int EOF = -1;
 
-    public static void main(String[] args) {
-        
+    public static void main(String[] args) throws IOException {
+        List<String> lines = readLines("/tmp/data.txt");
+        System.out.println(lines);
     }
     
     static void copy(String fromFileName, String toFileName) throws IOException {
@@ -45,16 +47,25 @@ public class TextFileIO {
         
         ByteBuffer buffer = ByteBuffer.allocate(1000);
         int lineSize = 0;
-        byte[] bytes = new byte[1024];
+        byte[] bytes;
         while ((b = fis.read()) != EOF) {
-            buffer.put((byte) b);
             lineSize++;
-            if (b == '\n') {
-                buffer.get(bytes, b, lineSize);
+            if (b != '\n') {
+                buffer.put((byte) b);
+            } else {
+                bytes = new byte[lineSize];
+                buffer.flip();
+                buffer.get(bytes, 0, lineSize-1);
+                String line = new String(bytes, StandardCharsets.US_ASCII);
+                lines.add(line);
+                
                 lineSize = 0;
+                buffer.rewind();
             }
         }
         
-        return null;
+        fis.close();
+        
+        return lines;
     }
 }
