@@ -31,15 +31,16 @@ public class ThreadSignaling {
      */
     class WaitNotifySignaling1 {
         public synchronized void doWait() throws InterruptedException {
-            wait();
+            this.wait();
         }
         
         public synchronized void doNotify() {
-            notify();
+            this.notify();
         }
     }
     
     /**
+     * Fix issue missed signal
      * One problem:
      *   Spurious wakeup (http://tutorials.jenkov.com/java-concurrency/thread-signaling.html)
      */
