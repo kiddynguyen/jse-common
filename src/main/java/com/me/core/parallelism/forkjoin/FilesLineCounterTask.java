@@ -26,16 +26,22 @@ public class FilesLineCounterTask extends RecursiveTask<Map<String, Long>> {
     
     @Override
     protected Map<String, Long> compute() {
-        if (files.size() < THRESHOLD)
+        // base case
+        if (files.size() < THRESHOLD) {
             return countLines(files);
+        }
         
+        // divide to subtasks for processing parallely
         List<RecursiveTask> subTasks = createSubTasks();
-        for (RecursiveTask subTask : subTasks)
+        for (RecursiveTask subTask : subTasks) {
             subTask.fork();
+        }
         
+        // combine results from subtasks
         Map<String, Long> result = new HashMap<>();
-        for (RecursiveTask subTask : subTasks)
+        for (RecursiveTask subTask : subTasks) {
             result.putAll((Map<String, Long>)subTask.join());
+        }
         
         return result;
     }
@@ -66,14 +72,19 @@ public class FilesLineCounterTask extends RecursiveTask<Map<String, Long>> {
     
     private long countLines(String file) {
         long nlines = 0;
+        BufferedReader buffer = null;
         
         try {
             FileReader reader = new FileReader(file);
-            BufferedReader buffer = new BufferedReader(reader);
+            buffer = new BufferedReader(reader);
             while (buffer.readLine() != null)
                 nlines++;
         } catch (IOException e) {
             e.printStackTrace();
+        } finally {
+            if (buffer != null) {
+                try { buffer.close(); } catch (IOException e) {}
+            }
         }
         
         return nlines;
