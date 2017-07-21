@@ -1,5 +1,6 @@
 package com.me.core.parallelism.forkjoin;
 
+import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ForkJoinPool;
 
 /**
@@ -12,5 +13,6 @@ public class FilesLineCounterApp {
     
     public static void main(String[] args) {
         ForkJoinPool pool = new ForkJoinPool(16);
+        BlockingQueue<Object> queue;
     }
 }

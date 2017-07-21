@@ -18,6 +18,8 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.DelayQueue;
 import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author tunm2
@@ -57,10 +59,44 @@ public class Collections {
     static DelayQueue delayQueue = new DelayQueue();
     
     
-    ////////////////////////////////////////////
-    // TESTING
-    ////////////////////////////////////////////
-    public static void main(String[] args) {
-        int arr[] = new int[Integer.MAX_VALUE-5];
+    public static void main(String[] args) throws InterruptedException {
+        
+        int corePoolSize = Runtime.getRuntime().availableProcessors();
+        int maxPoolSize = 2 * corePoolSize;
+        BlockingQueue taskQueue = new LinkedBlockingQueue<>(8);
+        
+        ThreadPoolExecutor executor = new ThreadPoolExecutor(corePoolSize, maxPoolSize, 0, TimeUnit.MILLISECONDS, taskQueue);
+        
+        for (int i = 0; i < 20; i++) {
+            executor.execute(new Task(i, 10));
+        }
+        
+        while (true) {
+            int activedThreads = executor.getActiveCount();
+            int largestPoolSize = executor.getLargestPoolSize();
+
+            System.err.println("++ activedTheads: " + activedThreads);
+            System.err.println("++ largestPoolS: " + largestPoolSize);
+            
+            Thread.sleep(1000);
+        }
+    }
+    
+    static class Task implements Runnable {
+        int id;
+        int size;
+        
+        public Task(int id, int size) {
+            this.id = id;
+            this.size = size;
+        }
+        
+        @Override
+        public void run() {
+            try {
+                Thread.sleep(1000 * size);
+                System.err.println(id + " done!");
+            } catch (InterruptedException e) {}
+        }
     }
 }
