@@ -3,7 +3,9 @@ package com.me.core.io.network.socket;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -30,29 +32,30 @@ public class Server {
         // privileged users (root)
         serverSocket = new ServerSocket(PORT_NUMBER, MAX_REQUESTS);
 
-        BufferedReader bufferReader;
-        BufferedWriter bufferWriter;
-        
         // Wait for new connection from client
         while (true) {
             Socket clientSocket = serverSocket.accept();
-            InputStreamReader reader = new InputStreamReader(clientSocket.getInputStream());
-            bufferReader = new BufferedReader(reader);
+            handle(clientSocket);
+        }
+    }
+    
+    private void handle(Socket clientSocket) throws IOException {
+        InputStream inStream = clientSocket.getInputStream();
+        OutputStream outStream = clientSocket.getOutputStream();
 
-            OutputStreamWriter writer = new OutputStreamWriter(clientSocket.getOutputStream());
-            bufferWriter = new BufferedWriter(writer);
+        BufferedReader bufferReader = new BufferedReader(new InputStreamReader(inStream));
+        BufferedWriter bufferWriter = new BufferedWriter(new OutputStreamWriter(outStream));
 
-            String clientAddress = clientSocket.getInetAddress().getHostName();
-            int clientPort = clientSocket.getPort();
+        String clientAddress = clientSocket.getInetAddress().getHostName();
+        int clientPort = clientSocket.getPort();
 
-            // Poll message from client
-            String msgFromClient;
-            while ((msgFromClient = bufferReader.readLine()) != null) {
-                System.out.println(msgFromClient);
+        // Poll message from client
+        String msgFromClient;
+        while ((msgFromClient = bufferReader.readLine()) != null) {
+            System.out.println(msgFromClient);
 
-                String msgToClient = "From " + clientAddress + ":" + clientPort + ": " + msgFromClient;
-                bufferWriter.write(msgToClient);
-            }
+            String msgToClient = "From " + clientAddress + ":" + clientPort + ": " + msgFromClient;
+            bufferWriter.write(msgToClient);
         }
     }
 }
