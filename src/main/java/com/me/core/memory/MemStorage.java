@@ -1,5 +1,8 @@
 package com.me.core.memory;
 
+import java.lang.ref.SoftReference;
+import java.lang.ref.WeakReference;
+
 /**
  * @author tunm2
  */
@@ -19,6 +22,11 @@ public class MemStorage {
         System.out.println("i32b: " + i32b);
         MemStorage ms = new MemStorage();
         System.out.println(ms.i32hs);
+        
+        int[] s = new int[Integer.MAX_VALUE];
+        WeakReference wr = new WeakReference("");
+        SoftReference sr = new SoftReference("");
+//        PhantomReference pr = new PhantomReference(sr, q)
     }
     
     public void func() {

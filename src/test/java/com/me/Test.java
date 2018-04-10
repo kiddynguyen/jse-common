@@ -1,29 +1,20 @@
 package com.me;
 
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  *
  * @author tunm2
  */
-public class Test extends LinkedHashMap<Object, Object> {
+public class Test {
     
-    private int lruSize;
-    
-    public Test(int initialCapacity) {
-        super(initialCapacity, 0.75F, true);
-        this.lruSize = (int)(initialCapacity * 0.75F);
-    }
-
-    @Override
-    protected boolean removeEldestEntry(Map.Entry<Object, Object> eldest) {
-        return size() > lruSize;
-    }
-    
+    	private static AtomicInteger count =  new AtomicInteger(0);
     public static void main(String[] args) {
-        HashMap<String, Object> map = new HashMap<>();
+        count.incrementAndGet();
+        try {
+            String s = "";
+        } catch (Exception e) {
+            throw e;
+        }
     }
-    
 }
